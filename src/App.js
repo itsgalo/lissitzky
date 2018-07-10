@@ -17,6 +17,8 @@ let mouse = new THREE.Vector2();
 let px, py, pz;
 let lines = [];
 let bones = [];
+let bool = false;
+
 
 class Lissitzky extends React.Component {
   constructor(props) {
@@ -91,6 +93,7 @@ class Lissitzky extends React.Component {
     bones.push(blocks);
   }
   componentDidMount() {
+    document.title = "Lissitzky";
     //init CANNON
     const world = new CANNON.World();
     world.gravity.set(0,0,0);
@@ -152,6 +155,7 @@ class Lissitzky extends React.Component {
     this.mount.appendChild(this.renderer.domElement);
     this.renderer.domElement.addEventListener('touchstart', this.touchdown.bind(this));
     this.renderer.domElement.addEventListener('touchmove', this.touchmove.bind(this));
+    window.addEventListener('keypress', this.key.bind(this));
     this.start();
 
   }
@@ -246,7 +250,15 @@ class Lissitzky extends React.Component {
   renderScene() {
     this.renderer.render(this.scene, this.camera);
   }
-
+  key(e) {
+    if (!bool) {
+      this.world.gravity.set(0, -10, 0);
+      bool = true;
+    } else if (bool) {
+      this.world.gravity.set(0, 0, 0);
+      bool = false;
+    }
+  }
   render() {
     return (
       <div
@@ -257,6 +269,7 @@ class Lissitzky extends React.Component {
         style={{ width: w, height: h }}
         ref={(mount) => { this.mount = mount }}
       />
+
     )
   }
 }
