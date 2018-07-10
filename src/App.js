@@ -43,25 +43,25 @@ class Lissitzky extends React.Component {
     lines.push(line);
   }
   extrudeLine = function() {
+    //calculate begin and end points
     let dia = this.rand(0.2, 1);
     let pointA = new THREE.Vector3( mouseLine.vertices[0].x, mouseLine.vertices[0].y, mouseLine.vertices[0].z);
     let pointB = new THREE.Vector3( mouseLine.vertices[1].x, mouseLine.vertices[1].y, mouseLine.vertices[1].z );
     let rot = Math.atan2(pointB.x - pointA.x, pointB.z - pointA.z);
     let dist = pointA.distanceTo(pointB);
     let center = new CANNON.Vec3((pointA.x + pointB.x) / 2, dist/4, (pointA.z + pointB.z) / 2);
-
+    //rotation
     let quat = new CANNON.Quaternion();
     quat.setFromAxisAngle(new CANNON.Vec3(0,1,0),rot);
 
     let cyl = new CANNON.Box(new CANNON.Vec3(dia / 2, dist / 4, dist / 2));
-    //var cyl = new CANNON.Cylinder(dia, dia, dist, 16);
     let body = new CANNON.Body({
       mass: 0.9
     });
     body.addShape(cyl, center, quat);
 
     let updateCOM = function( body ) {
-    //first calculate the center of mass
+    //calculate the center of mass
     let com = new CANNON.Vec3();
     body.shapeOffsets.forEach( function( offset ) {
         com.vadd( offset, com );
@@ -81,29 +81,17 @@ class Lissitzky extends React.Component {
     this.world.addBody(body);
     bodies.push(body);
 
-    //curve = new THREE.LineCurve3( pointA, pointB );
-    //var ext = new THREE.TubeGeometry( curve, 20, dia, 16, false );
-    //var ext = new THREE.CylinderGeometry(dia, dia, dist, 32);
     let ext = new THREE.BoxGeometry(dia, dist / 2, dist)
     let extrusion = new THREE.Mesh( ext, this.material );
-
-    let ball = new THREE.SphereGeometry(dia, 32, 32);
-    //var ball = new THREE.CylinderGeometry(dia * 1.5, dia * 1.5, 0.2, 32);
-    let ballA = new THREE.Mesh(ball, this.material);
-    let ballB = new THREE.Mesh(ball, this.material);
-    ballA.position.y = -dist / 2;
-    ballB.position.y = dist / 2;
     extrusion.rotation.y = rot;
 
-    let balls = new THREE.Group();
-    balls.add(extrusion);
-    //balls.add( ballA );
-    //balls.add( ballB );
-    this.scene.add(balls);
-    bones.push(balls);
+    let blocks = new THREE.Group();
+    blocks.add(extrusion);
+    this.scene.add(blocks);
+    bones.push(blocks);
   }
   componentDidMount() {
-
+    //init CANNON
     const world = new CANNON.World();
     world.gravity.set(0,0,0);
     world.broadphase = new CANNON.NaiveBroadphase();
@@ -137,7 +125,7 @@ class Lissitzky extends React.Component {
     renderer.setSize(w, h);
     const wireframe = new THREE.MeshBasicMaterial( { color: 0xff00ff, side: THREE.DoubleSide, transparent: true, opacity: 0 } );
     const material = new THREE.MeshPhongMaterial( { color: 0xffffff,  shininess: 25, overdraw: 1, side: THREE.DoubleSide } );
-    const dashed = new THREE.LineDashedMaterial( { color: 0x000000, dashSize: 0.5, gapSize: 0.5, linewidth: 5, scale: 3 } );
+    const dashed = new THREE.LineDashedMaterial( { color: 0x444444, dashSize: 0.5, gapSize: 0.5, linewidth: 5, scale: 3 } );
     const controls = new OrbitControls( camera, renderer.domElement );
     controls.enableRotate = false;
 
@@ -256,11 +244,6 @@ class Lissitzky extends React.Component {
   }
 
   renderScene() {
-    // raycaster.setFromCamera(mouse, this.camera);
-    // let intersects = raycaster.intersectObjects(this.scene.children);
-    // for ( let i = 0; i < intersects.length; i++ ) {
-    //   rays = intersects[i].point;
-    // }
     this.renderer.render(this.scene, this.camera);
   }
 
