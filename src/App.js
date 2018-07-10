@@ -18,7 +18,7 @@ let px, py, pz;
 let lines = [];
 let bones = [];
 
-class App extends React.Component {
+class Lissitzky extends React.Component {
   constructor(props) {
     super(props);
 
@@ -130,14 +130,15 @@ class App extends React.Component {
       -1000,
       3000
     );
-    camera.position.set(-100, 100, 100);
+    camera.position.set(-10, 10, 10);
+    camera.lookAt(0,0,0)
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(w, h);
     const wireframe = new THREE.MeshBasicMaterial( { color: 0xff00ff, side: THREE.DoubleSide, transparent: true, opacity: 0 } );
     const material = new THREE.MeshPhongMaterial( { color: 0xffffff,  shininess: 25, overdraw: 1, side: THREE.DoubleSide } );
     const dashed = new THREE.LineDashedMaterial( { color: 0x000000, dashSize: 0.5, gapSize: 0.5, linewidth: 5, scale: 3 } );
-    const controls = new OrbitControls( camera );
+    const controls = new OrbitControls( camera, renderer.domElement );
     controls.enableRotate = false;
 
     const ground =  new THREE.Mesh( new THREE.PlaneGeometry( 100, 100, 4, 4 ), wireframe );
@@ -158,9 +159,11 @@ class App extends React.Component {
     this.controls = controls;
     this.dashed = dashed;
 
-    controls.update();
+    this.controls.update();
 
     this.mount.appendChild(this.renderer.domElement);
+    this.renderer.domElement.addEventListener('touchstart', this.touchdown.bind(this));
+    this.renderer.domElement.addEventListener('touchmove', this.touchmove.bind(this));
     this.start();
 
   }
@@ -172,20 +175,57 @@ class App extends React.Component {
     e.preventDefault();
     mouse.x = ( e.clientX / w ) * 2 - 1;
     mouse.y = - ( e.clientY / h ) * 2 + 1;
+    raycaster.setFromCamera(mouse, this.camera);
+    let intersects = raycaster.intersectObjects(this.scene.children);
+    for ( let i = 0; i < intersects.length; i++ ) {
+      rays = intersects[i].point;
+    }
+    if(drawing === true) {
+      this.updateVerts(rays.x, rays.y, rays.z);
+    }
+  }
+  touchmove(e) {
+    mouse.x = ( e.targetTouches[0].pageX / w ) * 2 - 1;
+    mouse.y = - ( e.targetTouches[0].pageY / h ) * 2 + 1;
+    raycaster.setFromCamera(mouse, this.camera);
+    let intersects = raycaster.intersectObjects(this.scene.children);
+    for ( let i = 0; i < intersects.length; i++ ) {
+      rays = intersects[i].point;
+    }
     if(drawing === true) {
       this.updateVerts(rays.x, rays.y, rays.z);
     }
   }
   down(e) {
     e.preventDefault();
+    drawing = true;
+    raycaster.setFromCamera(mouse, this.camera);
+    let intersects = raycaster.intersectObjects(this.scene.children);
+    for ( let i = 0; i < intersects.length; i++ ) {
+      rays = intersects[i].point;
+    }
     px = rays.x;
     py = rays.y;
     pz = rays.z;
+    this.addShapes(px, py, pz);
+  }
+  touchdown(e) {
     drawing = true;
+    mouse.x = ( e.targetTouches[0].pageX / w ) * 2 - 1;
+    mouse.y = - ( e.targetTouches[0].pageY / h ) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, this.camera);
+    let intersects = raycaster.intersectObjects(this.scene.children);
+    for ( let i = 0; i < intersects.length; i++ ) {
+      rays = intersects[i].point;
+    }
+
+    px = rays.x;
+    py = rays.y;
+    pz = rays.z;
     this.addShapes(px, py, pz);
   }
   up(e) {
-    e.preventDefault();
     drawing = false;
     this.extrudeLine();
     this.scene.remove(line);
@@ -207,7 +247,7 @@ class App extends React.Component {
 
   animate() {
     this.world.step(this.timeStep);
-    for (var i = 0; i < bodies.length; i++) {
+    for (let i = 0; i < bodies.length; i++) {
       bones[i].position.copy(bodies[i].position);
       bones[i].quaternion.copy(bodies[i].quaternion);
     }
@@ -216,11 +256,11 @@ class App extends React.Component {
   }
 
   renderScene() {
-    raycaster.setFromCamera(mouse, this.camera);
-    let intersects = raycaster.intersectObjects(this.scene.children);
-    for ( let i = 0; i < intersects.length; i++ ) {
-      rays = intersects[i].point;
-    }
+    // raycaster.setFromCamera(mouse, this.camera);
+    // let intersects = raycaster.intersectObjects(this.scene.children);
+    // for ( let i = 0; i < intersects.length; i++ ) {
+    //   rays = intersects[i].point;
+    // }
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -230,6 +270,7 @@ class App extends React.Component {
         onMouseMove = {this.move.bind(this)}
         onMouseDown = {this.down.bind(this)}
         onMouseUp = {this.up.bind(this)}
+        onTouchEnd = {this.up.bind(this)}
         style={{ width: w, height: h }}
         ref={(mount) => { this.mount = mount }}
       />
@@ -237,4 +278,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default Lissitzky;
