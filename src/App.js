@@ -121,7 +121,8 @@ class Lissitzky extends React.Component {
       -1000,
       3000
     );
-    camera.position.set(-10, 10, 10);
+    //important for raycasting - must be far enough
+    camera.position.set(-100, 100, 100);
     camera.lookAt(0,0,0)
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -132,7 +133,7 @@ class Lissitzky extends React.Component {
     const controls = new OrbitControls( camera, renderer.domElement );
     controls.enableRotate = false;
 
-    const ground =  new THREE.Mesh( new THREE.PlaneGeometry( 100, 100, 4, 4 ), wireframe );
+    const ground =  new THREE.Mesh( new THREE.PlaneGeometry( 1000, 1000, 4, 4 ), wireframe );
     ground.rotation.x = -Math.PI/2;
     scene.add(ground);
 
@@ -261,6 +262,8 @@ class Lissitzky extends React.Component {
   }
   render() {
     return (
+      <div>
+      <div className='title'><a href=''>lissitzky.xyz</a></div>
       <div
         onMouseMove = {this.move.bind(this)}
         onMouseDown = {this.down.bind(this)}
@@ -269,6 +272,7 @@ class Lissitzky extends React.Component {
         style={{ width: w, height: h }}
         ref={(mount) => { this.mount = mount }}
       />
+      </div>
 
     )
   }
