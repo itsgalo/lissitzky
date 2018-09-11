@@ -1,20 +1,35 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'IBM Plex Sans', serif;
   overflow:hidden;
-  background-color: #e2e2e2;
+  background-color: #1c1c1c;
   cursor: crosshair;
   touch-action: none;
 }
-a {
+h1 {
   text-decoration: none;
-  color:#555;
-  letter-spacing: 2px;
-  font-size: 12pt;
-  text-align: center;
+  font-weight: 400;
+  color:#fff;
+  letter-spacing: 0px;
+  font-size: 28pt;
+  text-align: left;
 }
 .title {
   position: absolute;
-  margin: 20px;
+  margin: 0px 20px;
+  width: 100%;
+  z-index: -999;
+}
+
+@media only screen and (max-device-width: 450px){
+  h1 {
+    text-decoration: none;
+    font-weight: 400;
+    color:#fff;
+    letter-spacing: 0px;
+    font-size: 18pt;
+    text-align: left;
+  }
+
 }

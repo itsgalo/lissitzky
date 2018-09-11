@@ -96,7 +96,7 @@ export default canvas => {
   function onUp(clientX, clientY) {
     drawing = false;
     sceneSubjects[1].extrudeLine();
-    //scene.remove(line);
+    sceneSubjects[1].removeLine();
   }
 
   function onMove(clientX, clientY) {
