@@ -12,13 +12,13 @@ h1 {
   font-weight: 400;
   color:#fff;
   letter-spacing: 0px;
-  font-size: 28pt;
+  font-size: 4vw;
   text-align: left;
 }
 .title {
   position: absolute;
   margin: 0px 20px;
-  width: 100%;
+  width: 95%;
   z-index: -999;
 }
 
@@ -30,6 +30,10 @@ h1 {
     letter-spacing: 0px;
     font-size: 18pt;
     text-align: left;
+  }
+  .title {
+    position: absolute;
+    width: 90%;
   }
 
 }
