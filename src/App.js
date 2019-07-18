@@ -10,7 +10,8 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <div className='title'><a href=''>lissitzky.xyz</a></div>
+        <div className='title'><a href=''>lissitzky.xyz</a><br></br>
+          <a>a project by</a><a href='http://officeca.com'> office ca</a></div>
         <div ref={element => this.threeRootElement = element} />
       </div>
     );

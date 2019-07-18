@@ -3,7 +3,7 @@ body {
   padding: 0;
   font-family: sans-serif;
   overflow:hidden;
-  background-color: #e2e2e2;
+  background-color: #000;
   cursor: crosshair;
   touch-action: none;
 }

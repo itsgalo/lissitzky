@@ -4,6 +4,7 @@ export default container => {
 
   const canvas = createCanvas(document, container);
   const sceneManager = new SceneManager(canvas);
+  let pointTest = [0,0];
 
   bindEventListeners();
   render();
@@ -42,11 +43,15 @@ export default container => {
   function mDown(e) {
     e.preventDefault();
     sceneManager.onDown(e.clientX, e.clientY);
+    pointTest[0] = e.clientX;
+    pointTest[1] = e.clientY;
     return false;
   }
 
   function mUp(e) {
-    sceneManager.onUp();
+    if (e.clientX !== pointTest[0] && e.clientY !== pointTest[1]) {
+      sceneManager.onUp();
+    }
   }
 
   function mMove(e) {
