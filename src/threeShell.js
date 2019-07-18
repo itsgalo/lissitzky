@@ -49,7 +49,7 @@ export default container => {
   }
 
   function mUp(e) {
-    if (e.clientX !== pointTest[0] && e.clientY !== pointTest[1]) {
+    if (e.clientX !== pointTest[0] || e.clientY !== pointTest[1]) {
       sceneManager.onUp();
     }
   }
