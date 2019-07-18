@@ -4,7 +4,7 @@ export default container => {
 
   const canvas = createCanvas(document, container);
   const sceneManager = new SceneManager(canvas);
-  let pointTest = [0,0];
+  let pointTest = [0,0,0,0];
 
   bindEventListeners();
   render();
@@ -66,6 +66,8 @@ export default container => {
 
   function touchS(e) {
     sceneManager.onDown(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+    pointTest[0] = e.targetTouches[0].pageX;
+    pointTest[1] = e.targetTouches[0].pageY;
   }
 
   function touchM(e) {
@@ -73,7 +75,9 @@ export default container => {
   }
 
   function touchUp(e) {
-    sceneManager.onUp();
+    if (e.changedTouches[0].pageX !== pointTest[0] && e.changedTouches[0].pageY !== pointTest[1]){
+      sceneManager.onUp();
+    }
   }
 
   function render(time) {
