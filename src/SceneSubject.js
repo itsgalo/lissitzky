@@ -24,13 +24,8 @@ export default scene => {
 
 	//init three materials
 	const wireframe = new THREE.MeshBasicMaterial( { color: 0xff00ff, side: THREE.DoubleSide, transparent: true, opacity: 0 } );
-<<<<<<< HEAD
 	const material = new THREE.MeshPhongMaterial( { color: 0xffffff,  shininess: 25, overdraw: 1, side: THREE.DoubleSide } );
 	const dashed = new THREE.LineDashedMaterial( { color: 0xffffff, dashSize: 0.2, gapSize: 0.2, linewidth: 5 } );
-=======
-	const material = new THREE.MeshPhongMaterial( { color: 0xffffff,  shininess: 25, overdraw: 1, opacity: 0.98, side: THREE.DoubleSide } );
-	const dashed = new THREE.LineDashedMaterial( { color: 0xffffff, dashSize: 0.5, gapSize: 0.5, linewidth: 5, scale: 3 } );
->>>>>>> 258f13b885003f6b2e2800444dbca73b69fc7304
 	//add ground
 	const ground =  new THREE.Mesh( new THREE.PlaneGeometry( 1000, 1000, 4, 4 ), wireframe );
 	ground.rotation.x = -Math.PI/2;
@@ -48,12 +43,6 @@ export default scene => {
     line.geometry.lineDistancesNeedUpdate = true;
     scene.add( line );
     lines.push(line);
-
-	}
-
-	function removeLine() {
-
-		scene.remove(line);
 
 	}
 
@@ -141,7 +130,6 @@ export default scene => {
     update,
 		updateVerts,
 		addShapes,
-		removeLine,
 		extrudeLine,
 		changeGravity
   }
