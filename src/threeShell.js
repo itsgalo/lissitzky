@@ -4,7 +4,7 @@ export default container => {
 
   const canvas = createCanvas(document, container);
   const sceneManager = new SceneManager(canvas);
-  let pointTest = [0,0,0,0];
+  let pointTest = [0,0];
 
   bindEventListeners();
   render();
